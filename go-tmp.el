@@ -54,4 +54,6 @@
     (find-file (go-tmp-main-file))
     (message run-output)))
 
+(provide 'go-tmp)
+
 ;;; go-tmp.el ends here
