@@ -1,3 +1,20 @@
+;;; go-tmp.el --- Helper functions to run Go code in a local throwaway project
+
+;; Author: A.L. <adlawren010@gmail.com>
+;; Maintainer: A.L. <adlawren010@gmail.com>
+;; Created: 11 Apr 2020
+;; Version: 0.0.1
+;; Keywords: languages, go
+;; URL: https://github.com/adlawren/go-tmp.el
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+;; In lieu of copying/uploading code to The Go Playground, this package creates a local throwaway project at $GOPATH/src/go-tmp.el/tmp which can be used to run the code instead. Code from a selected region can be automatically executed in this project and the output illustrated.
+;; Within the throwaway project, the goimports tool is used to import dependencies needed by the selected code. As such, in order for this package to work, goimports must be installed and accessible from $PATH in an arbitrary shell.
+
+;;; Code:
+
 (defvar
   go-tmp-dir
   (concat (getenv "GOPATH") "/src/go-tmp.el/tmp")
@@ -36,3 +53,5 @@
           (revert-buffer :ignore-auto :noconfirm)))))
     (find-file (go-tmp-main-file))
     (message run-output)))
+
+;;; go-tmp.el ends here
