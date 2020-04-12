@@ -10,8 +10,8 @@
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
-;; In lieu of copying/uploading code to The Go Playground, this package creates a local throwaway project at $GOPATH/src/go-tmp.el/tmp which can be used to run the code instead. Code from a selected region can be automatically executed in this project and the output illustrated.
-;; Within the throwaway project, the goimports tool is used to import dependencies needed by the selected code. As such, in order for this package to work, goimports must be installed and accessible from $PATH in an arbitrary shell.
+;; In lieu of copying/uploading code to The Go Playground, this package can run code snippets in a local throwaway project and print the output. The throwaway project is automatically created in $GOPATH/src/go-tmp.el/tmp.
+;; Within the throwaway project, the goimports tool is used to import any dependencies needed by a code snippet. As such, goimports must be installed and accessible in $PATH prior to using this package.
 
 ;;; Code:
 

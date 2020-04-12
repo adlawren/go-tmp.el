@@ -1,2 +1,2 @@
 # go-tmp.el
-Emacs Lisp functions used to execute Go code in a throwaway local project - an alternative to the Go playground
+Helper functions to run Go code in a local throwaway project - an alternative to The Go Playground
