@@ -18,7 +18,12 @@
 (defvar
   go-tmp-dir
   (concat (getenv "GOPATH") "/src/go-tmp.el/tmp")
-  "The path to the throwaway project.")
+  "The path to the throwaway Go project.")
+
+(defvar
+  go-tmp-previous-buffer
+  nil
+  "The buffer that was in focus before the main.go file in the throwaway project was opened.")
 
 (defun go-tmp-main-file ()
   "Return the path to the main.go file in the throwaway project."
@@ -33,6 +38,16 @@
   (shell-command-to-string
    (concat "cd \"" go-tmp-dir "\" && goimports -w -e . && go run .")))
 
+(defun go-tmp-revert-and-focus ()
+  (setq go-tmp-previous-buffer (current-buffer))
+  (with-temp-buffer
+    (let ((file-buffer (find-buffer-visiting (go-tmp-main-file))))
+      (cond
+       (file-buffer
+        (switch-to-buffer file-buffer)
+        (revert-buffer :ignore-auto :noconfirm)))))
+  (find-file (go-tmp-main-file)))
+
 (defun go-tmp-region ()
   "Run the Go code from the selected region in a throwaway project, and print the output."
   (interactive)
@@ -45,14 +60,18 @@
   (let ((run-output
          (go-tmp-run-text
           (buffer-substring (region-beginning) (region-end)))))
-    (with-temp-buffer
-      (let ((file-buffer (find-buffer-visiting (go-tmp-main-file))))
-        (cond
-         (file-buffer
-          (switch-to-buffer file-buffer)
-          (revert-buffer :ignore-auto :noconfirm)))))
-    (find-file (go-tmp-main-file))
+    (go-tmp-revert-and-focus)
     (message run-output)))
+
+(defun go-tmp-focus ()
+  "Open the main.go file in the throwaway project. If the file is already open in an existing buffer, any changes therein are reverted."
+  (interactive)
+  (go-tmp-revert-and-focus))
+
+(defun go-tmp-unfocus ()
+  "Switch to the buffer that was in focus before the main.go file in the throwaway project was brought into focus."
+  (interactive)
+  (switch-to-buffer go-tmp-previous-buffer))
 
 (provide 'go-tmp)
 
