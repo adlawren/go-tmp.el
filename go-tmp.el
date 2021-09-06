@@ -15,6 +15,8 @@
 
 ;;; Code:
 
+;; -*- lexical-binding: t; -*-
+
 (defvar
   go-tmp-dir
   (concat (getenv "GOPATH") "/src/go-tmp.el/tmp")
@@ -25,13 +27,14 @@
   (concat go-tmp-dir "/main.go"))
 
 (defun go-tmp-run-text (text)
-  "Run the given Go code in a throwaway project, and return the output as a string. goimports is used to import required dependencies."
+  "Run the given Go code (TEXT) in a throwaway project, and return the output as a string. goimports is used to import required dependencies."
   (mkdir go-tmp-dir t)
-  (string-to-file
+  (write-region
    (concat "package main\nfunc main() {\n" text "\n}\n")
+   nil
    (go-tmp-main-file))
   (shell-command-to-string
-   (concat "cd \"" go-tmp-dir "\" && goimports -w -e . && go run .")))
+   (concat "cd \"" go-tmp-dir "\" && goimports -w -e . && go run main.go")))
 
 (defun go-tmp-region ()
   "Run the Go code from the selected region in a throwaway project, and print the output."
@@ -40,7 +43,7 @@
    (go-tmp-run-text (buffer-substring (region-beginning) (region-end)))))
 
 (defun go-tmp-region-focus ()
-  "Same as go-tmp-region, but also opens the main.go file from the throwaway project in a buffer, and switches to that buffer. If the file is open in an existing buffer, that buffer is used, after the file has been reloaded from disk - any changes in the existing buffer are discarded."
+  "Same as go-tmp-region, but also opens the main.go file from the throwaway project in a buffer, and switch to that buffer. If the file is open in an existing buffer, that buffer is used, after the file has been reloaded from disk - any changes in the existing buffer are discarded."
   (interactive)
   (let ((run-output
          (go-tmp-run-text
