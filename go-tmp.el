@@ -3,7 +3,7 @@
 ;; Author: A.L. <adlawren010@gmail.com>
 ;; Maintainer: A.L. <adlawren010@gmail.com>
 ;; Created: 11 Apr 2020
-;; Version: 0.0.1
+;; Version: 1.0.0
 ;; Keywords: languages, go
 ;; URL: https://github.com/adlawren/go-tmp.el
 
